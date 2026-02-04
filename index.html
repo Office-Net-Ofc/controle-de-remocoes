@@ -7,9 +7,6 @@
   <link rel="icon" type="image/png" href="imagens/Office Net - Perfil.png">
 
   <style>
-    /* ==========================
-       TEMA MAIS CLARO + CONTRASTE
-       ========================== */
     :root{
       --bg:#f4f7fb;
       --bg2:#eef3ff;
@@ -33,8 +30,6 @@
       --radius2:24px;
 
       --focus: rgba(37, 99, 235, .28);
-      --danger: #ef4444;
-
       --glass: blur(10px);
     }
 
@@ -44,8 +39,6 @@
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
-
-      /* Fundo bem mais claro, mantendo “marca” verde/laranja */
       background:
         radial-gradient(900px 520px at 12% 6%, rgba(34,197,94,.18), transparent 60%),
         radial-gradient(900px 520px at 88% 14%, rgba(251,146,60,.18), transparent 60%),
@@ -58,23 +51,29 @@
     button, select, input{ touch-action: manipulation; }
     .wrap{ max-width:1100px; margin:0 auto; padding:28px 18px 44px; }
 
-    /* ==========================
-       TOPBAR
-       ========================== */
+    /* TOPBAR */
     .topbar{
       display:flex; gap:14px; align-items:center; justify-content:space-between;
       margin-bottom:18px;
     }
     .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
 
+    /* ✅ LOGO LIVRE (sem borda/placa/sombra) + tamanho discreto (não minúsculo) */
     .logoImg{
-      width:46px; height:46px; border-radius:14px;
+      width:62px;
+      height:auto;
+      max-height:62px;
       object-fit: contain;
-      background: rgba(255,255,255,.92);
-      border: 1px solid var(--line2);
-      box-shadow: var(--shadow2);
-      padding: 8px;
+
+      /* remove “borda/placa” */
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
+      border-radius: 0;
+
       flex: 0 0 auto;
+      opacity: .95; /* discreta */
     }
 
     .title{ min-width:0; }
@@ -118,9 +117,7 @@
       box-shadow: 0 8px 18px rgba(15,23,42,.06);
     }
 
-    /* ==========================
-       GRID / CARDS
-       ========================== */
+    /* GRID / CARDS */
     .grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; }
     @media (max-width: 900px){ .grid{ grid-template-columns:1fr; } }
 
@@ -220,9 +217,7 @@
       border: 1px dashed rgba(15,23,42,.14);
     }
 
-    /* ==========================
-       TOAST (mais claro e legível)
-       ========================== */
+    /* TOAST */
     .toast{
       position: fixed;
       left: 50%;
@@ -242,13 +237,18 @@
       backdrop-filter: var(--glass);
     }
 
-    /* ==========================
-       RESPONSIVO / MOBILE
-       ========================== */
+    /* RESPONSIVO */
     @media (max-width: 1100px), (pointer: coarse), (hover: none) {
       .wrap{ max-width: 100%; padding: 16px 12px 26px; }
       .topbar{ flex-direction: column; align-items: stretch; gap: 12px; }
       .brand{ width:100%; }
+
+      /* no mobile, logo um pouco menor pra não ocupar demais */
+      .logoImg{
+        width:56px;
+        max-height:56px;
+      }
+
       .actions{ width:100%; justify-content: space-between; gap: 10px; }
       .grid{ display:flex; flex-direction:column; gap:12px; }
       .card.side{ order:-1; }
@@ -260,9 +260,7 @@
       body{ font-size:1rem; line-height:1.35; }
     }
 
-    /* ==========================
-       OVERLAY LOGIN (bem mais bonito)
-       ========================== */
+    /* OVERLAY LOGIN */
     .overlay{
       position: fixed; inset: 0;
       background:
@@ -294,7 +292,8 @@
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <img class="logoImg" src="imagens/Office Net - Perfil.png" alt="Office Net" />
+        <!-- ✅ LOGO NOVA -->
+        <img class="logoImg" src="imagens/Respiração Facebook Capa (10).png" alt="Office Net" />
         <div class="title">
           <h1>Remoções</h1>
           <p>Selecione a cidade e confirme a remoção quando finalizar.</p>
