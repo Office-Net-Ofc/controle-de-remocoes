@@ -7,160 +7,244 @@
   <link rel="icon" type="image/png" href="imagens/Office Net - Perfil.png">
 
   <style>
+    /* ==========================
+       TEMA MAIS CLARO + CONTRASTE
+       ========================== */
     :root{
-      --bg:#07110b;
-      --line:rgba(255,255,255,.10);
-      --text:#eafff1;
-      --muted:rgba(234,255,241,.70);
+      --bg:#f4f7fb;
+      --bg2:#eef3ff;
+
+      --card: rgba(255,255,255,.86);
+      --card-strong: rgba(255,255,255,.94);
+
+      --line: rgba(15,23,42,.10);
+      --line2: rgba(15,23,42,.14);
+
+      --text: #0f172a;
+      --muted: rgba(15,23,42,.62);
+
       --brand:#22c55e;
       --brand2:#fb923c;
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      --shadow: 0 18px 50px rgba(15,23,42,.10);
+      --shadow2: 0 10px 28px rgba(15,23,42,.10);
+
       --radius:18px;
       --radius2:24px;
+
+      --focus: rgba(37, 99, 235, .28);
+      --danger: #ef4444;
+
+      --glass: blur(10px);
     }
+
     *{ box-sizing:border-box; }
     html{ -webkit-text-size-adjust: 100%; }
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
+
+      /* Fundo bem mais claro, mantendo “marca” verde/laranja */
       background:
-        radial-gradient(900px 500px at 15% 10%, rgba(34,197,94,.18), transparent 60%),
-        radial-gradient(900px 500px at 85% 20%, rgba(251,146,60,.16), transparent 60%),
-        linear-gradient(180deg, #050a07 0%, var(--bg) 100%);
+        radial-gradient(900px 520px at 12% 6%, rgba(34,197,94,.18), transparent 60%),
+        radial-gradient(900px 520px at 88% 14%, rgba(251,146,60,.18), transparent 60%),
+        radial-gradient(900px 520px at 50% 90%, rgba(37,99,235,.10), transparent 62%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 40%, #ffffff 100%);
       min-height:100vh;
       font-size: 16px;
     }
+
     button, select, input{ touch-action: manipulation; }
     .wrap{ max-width:1100px; margin:0 auto; padding:28px 18px 44px; }
 
-    .topbar{ display:flex; gap:14px; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    /* ==========================
+       TOPBAR
+       ========================== */
+    .topbar{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      margin-bottom:18px;
+    }
     .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
+
     .logoImg{
       width:46px; height:46px; border-radius:14px;
       object-fit: contain;
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line2);
+      box-shadow: var(--shadow2);
       padding: 8px;
       flex: 0 0 auto;
     }
+
     .title{ min-width:0; }
-    .title h1{ font-size:18px; margin:0; }
+    .title h1{ font-size:18px; margin:0; letter-spacing:.2px; }
     .title p{ margin:4px 0 0; color:var(--muted); font-size:13px; }
 
     .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+
     .pill{
-      padding:10px 12px; border:1px solid var(--line);
-      border-radius:999px; color:var(--muted); font-size:13px;
-      background: rgba(255,255,255,.03);
-      backdrop-filter: blur(6px);
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:13px;
+      background: rgba(255,255,255,.70);
+      backdrop-filter: var(--glass);
       max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(15,23,42,.06);
     }
+
     .btn{
       border:0; cursor:pointer;
       padding:10px 14px; border-radius:14px;
-      color:#06140c; font-weight:800;
+      color:#07110b; font-weight:900;
       background: linear-gradient(135deg, var(--brand), var(--brand2));
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow2);
       font-size: 14px;
+      transition: transform .08s ease, filter .15s ease;
     }
-    .btn[disabled]{ opacity:.65; cursor:not-allowed; }
+    .btn:hover{ filter: brightness(1.02); transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0px); }
+    .btn[disabled]{ opacity:.65; cursor:not-allowed; transform:none; }
+
     .btnGhost{
-      background: rgba(255,255,255,.10);
+      background: rgba(255,255,255,.72);
       color: var(--text);
-      border: 1px solid var(--line);
-      box-shadow: none;
+      border: 1px solid var(--line2);
+      box-shadow: 0 8px 18px rgba(15,23,42,.06);
     }
 
+    /* ==========================
+       GRID / CARDS
+       ========================== */
     .grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; }
     @media (max-width: 900px){ .grid{ grid-template-columns:1fr; } }
 
     .card{
-      background: rgba(255,255,255,.03);
+      background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       overflow:hidden;
+      backdrop-filter: var(--glass);
     }
+
     .card-h{
       padding:16px 16px 12px;
       display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
       border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.75));
     }
     .card-h h2{ margin:0; font-size:15px; }
     .card-h p{ margin:6px 0 0; color:var(--muted); font-size:13px; }
 
     .list{ padding:12px; display:grid; gap:10px; }
+
     .item{
       padding:14px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(0,0,0,.18);
+      background: rgba(255,255,255,.82);
       display:flex; gap:10px; align-items:center; justify-content:space-between;
       flex-wrap:wrap;
+      box-shadow: 0 10px 26px rgba(15,23,42,.06);
+      transition: transform .08s ease, box-shadow .15s ease;
     }
+    .item:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 32px rgba(15,23,42,.10);
+    }
+
     .k{ color:var(--muted); font-size:12px; }
-    .v{ font-size:14px; font-weight:800; }
+    .v{ font-size:14px; font-weight:900; letter-spacing:.1px; }
 
     .confirmBtn{
       border: 1px solid rgba(34,197,94,.35);
-      background: rgba(34,197,94,.14);
-      color: var(--text);
+      background: rgba(34,197,94,.10);
+      color: #0b3a22;
       padding:10px 12px;
       border-radius: 14px;
       cursor:pointer;
       font-weight:900;
       white-space: nowrap;
       font-size: 14px;
+      transition: transform .08s ease, background .15s ease, filter .15s ease;
     }
-    .confirmBtn:hover{ background: rgba(34,197,94,.20); }
-    .confirmBtn[disabled]{ opacity:.65; cursor:not-allowed; }
+    .confirmBtn:hover{
+      background: rgba(34,197,94,.16);
+      transform: translateY(-1px);
+      filter: saturate(1.05);
+    }
+    .confirmBtn:active{ transform: translateY(0px); }
+    .confirmBtn[disabled]{ opacity:.65; cursor:not-allowed; transform:none; }
 
     .side{ padding:14px; }
+
     .box{
       border:1px solid var(--line);
       border-radius: var(--radius2);
-      background: rgba(0,0,0,.18);
+      background: rgba(255,255,255,.78);
       padding:14px;
       margin-bottom:12px;
+      box-shadow: 0 10px 26px rgba(15,23,42,.06);
     }
+
     select, input{
       width:100%;
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line2);
       color: var(--text);
       padding:10px 12px;
       border-radius: 14px;
       outline:none;
       font-size: 16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
     }
+    select:focus, input:focus{
+      border-color: rgba(37,99,235,.35);
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+
     .row{ display:flex; gap:10px; }
     .row > *{ flex:1; }
 
-    .empty{ padding:20px; color:var(--muted); text-align:center; display:none; }
+    .empty{
+      padding:20px; color:var(--muted); text-align:center; display:none;
+      background: rgba(255,255,255,.70);
+      margin: 0 12px 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(15,23,42,.14);
+    }
 
+    /* ==========================
+       TOAST (mais claro e legível)
+       ========================== */
     .toast{
       position: fixed;
       left: 50%;
       bottom: 18px;
       transform: translateX(-50%);
-      background: rgba(0,0,0,.70);
-      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line2);
       color: var(--text);
       padding: 10px 12px;
       border-radius: 14px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow2);
       display:none;
       max-width: 92vw;
       white-space: pre-wrap;
       z-index: 9999;
       font-size: 14px;
+      backdrop-filter: var(--glass);
     }
 
+    /* ==========================
+       RESPONSIVO / MOBILE
+       ========================== */
     @media (max-width: 1100px), (pointer: coarse), (hover: none) {
       .wrap{ max-width: 100%; padding: 16px 12px 26px; }
       .topbar{ flex-direction: column; align-items: stretch; gap: 12px; }
@@ -176,21 +260,28 @@
       body{ font-size:1rem; line-height:1.35; }
     }
 
+    /* ==========================
+       OVERLAY LOGIN (bem mais bonito)
+       ========================== */
     .overlay{
       position: fixed; inset: 0;
-      background: rgba(0,0,0,.62);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(34,197,94,.22), transparent 60%),
+        radial-gradient(900px 520px at 80% 15%, rgba(251,146,60,.22), transparent 60%),
+        rgba(15,23,42,.55);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 16px;
       z-index: 9998;
+      backdrop-filter: blur(10px);
     }
     .overlay .panel{
       width: min(560px, 96vw);
-      background: rgba(10,18,12,.92);
-      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.55);
       border-radius: 22px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 30px 80px rgba(15,23,42,.28);
       padding: 16px;
     }
     .overlay h3{ margin:0 0 8px; font-size: 16px; }
@@ -233,14 +324,14 @@
 
       <div class="card side">
         <div class="box">
-          <div class="k"> <b>Cidade<b> </div>
+          <div class="k"> <b>Cidade</b> </div>
           <select id="citySelect"></select>
           <p class="k" style="margin-top:10px;">
             Dica: Basta selecionar a cidade desejada que todos os clientes para remoção desta região aparecerão.
           </p>
         </div>
 
-        <div class="box" style="border-color: rgba(251,146,60,.25); background: rgba(251,146,60,.06);">
+        <div class="box" style="border-color: rgba(251,146,60,.28); background: rgba(251,146,60,.12);">
           <b>Regra simples:</b>
           <div class="k" style="margin-top:6px;">
             Tome cuidade, ao clicar em "confirmar remoção" o nome do cliente some da página e é dado baixa no sistema como "equipamento removido" e tudo fica registrado no nome de quem fez a operação.
