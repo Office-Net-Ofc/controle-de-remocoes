@@ -1,576 +1,301 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Remoções</title>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="imagens/Office Net - Perfil.png">
-
-  <style>
-    :root{
-      --bg:#07110b;
-      --line:rgba(255,255,255,.10);
-      --text:#eafff1;
-      --muted:rgba(234,255,241,.70);
-      --brand:#22c55e;
-      --brand2:#fb923c;
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --radius:18px;
-      --radius2:24px;
-    }
-    *{ box-sizing:border-box; }
-    html{ -webkit-text-size-adjust: 100%; }
-
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 15% 10%, rgba(34,197,94,.18), transparent 60%),
-        radial-gradient(900px 500px at 85% 20%, rgba(251,146,60,.16), transparent 60%),
-        linear-gradient(180deg, #050a07 0%, var(--bg) 100%);
-      min-height:100vh;
-      font-size: 16px;
-    }
-
-    button, select, input{ touch-action: manipulation; }
-
-    .wrap{ max-width:1100px; margin:0 auto; padding:28px 18px 44px; }
-
-    .topbar{
-      display:flex; gap:14px; align-items:center; justify-content:space-between;
-      margin-bottom:18px;
-    }
-
-    .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
-    .logoImg{
-      width:46px; height:46px; border-radius:14px;
-      object-fit: contain;
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      padding: 8px;
-      flex: 0 0 auto;
-    }
-    .title{ min-width:0; }
-    .title h1{ font-size:18px; margin:0; }
-    .title p{ margin:4px 0 0; color:var(--muted); font-size:13px; }
-
-    .actions{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;
-    }
-
-    .pill{
-      padding:10px 12px; border:1px solid var(--line);
-      border-radius:999px; color:var(--muted); font-size:13px;
-      background: rgba(255,255,255,.03);
-      backdrop-filter: blur(6px);
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .btn{
-      border:0; cursor:pointer;
-      padding:10px 14px; border-radius:14px;
-      color:#06140c; font-weight:800;
-      background: linear-gradient(135deg, var(--brand), var(--brand2));
-      box-shadow: var(--shadow);
-      font-size: 14px;
-    }
-    .btn[disabled]{ opacity:.65; cursor:not-allowed; }
-
-    .btnGhost{
-      background: rgba(255,255,255,.10);
-      color: var(--text);
-      border: 1px solid var(--line);
-      box-shadow: none;
-    }
-
-    .grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:14px; }
-    @media (max-width: 900px){ .grid{ grid-template-columns:1fr; } }
-
-    .card{
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--line);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card-h{
-      padding:16px 16px 12px;
-      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
-      border-bottom: 1px solid var(--line);
-    }
-    .card-h h2{ margin:0; font-size:15px; }
-    .card-h p{ margin:6px 0 0; color:var(--muted); font-size:13px; }
-
-    .list{ padding:12px; display:grid; gap:10px; }
-    .item{
-      padding:14px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(0,0,0,.18);
-      display:flex; gap:10px; align-items:center; justify-content:space-between;
-      flex-wrap:wrap;
-    }
-    .k{ color:var(--muted); font-size:12px; }
-    .v{ font-size:14px; font-weight:800; }
-
-    .confirmBtn{
-      border: 1px solid rgba(34,197,94,.35);
-      background: rgba(34,197,94,.14);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight:900;
-      white-space: nowrap;
-      font-size: 14px;
-    }
-    .confirmBtn:hover{ background: rgba(34,197,94,.20); }
-    .confirmBtn[disabled]{ opacity:.65; cursor:not-allowed; }
-
-    .side{ padding:14px; }
-    .box{
-      border:1px solid var(--line);
-      border-radius: var(--radius2);
-      background: rgba(0,0,0,.18);
-      padding:14px;
-      margin-bottom:12px;
-    }
-
-    select, input{
-      width:100%;
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--line);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius: 14px;
-      outline:none;
-      font-size: 16px;
-    }
-
-    .row{ display:flex; gap:10px; }
-    .row > *{ flex:1; }
-
-    .empty{ padding:20px; color:var(--muted); text-align:center; display:none; }
-
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,.70);
-      border: 1px solid var(--line);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      display:none;
-      max-width: 92vw;
-      white-space: pre-wrap;
-      z-index: 9999;
-      font-size: 14px;
-    }
-
-    /* ✅ Mobile forçado + zoom harmonioso */
-    @media (max-width: 1100px), (pointer: coarse), (hover: none) {
-      .wrap{ max-width: 100%; padding: 16px 12px 26px; }
-
-      .topbar{ flex-direction: column; align-items: stretch; gap: 12px; }
-      .brand{ width:100%; }
-      .actions{ width:100%; justify-content: space-between; gap: 10px; }
-
-      .grid{ display:flex; flex-direction:column; gap:12px; }
-      .card.side{ order:-1; }
-
-      .card-h{ flex-direction:column; align-items:flex-start; gap:10px; }
-      #lastSync{ width:100%; text-align:left; }
-
-      .item{ align-items:flex-start; gap:10px; }
-      .confirmBtn{ width:100%; text-align:center; }
-
-      html{ font-size: clamp(18px, 4.6vw, 22px); }
-      body{ font-size:1rem; line-height:1.35; }
-
-      .title h1{ font-size:1.05rem; }
-      .title p{ font-size:.85rem; }
-
-      .pill{ font-size:.85rem; padding:.7rem .85rem; }
-      .btn{ font-size:.9rem; padding:.7rem .95rem; }
-
-      .card-h h2{ font-size:.95rem; }
-      .card-h p{ font-size:.85rem; }
-
-      .k{ font-size:.82rem; }
-      .v{ font-size:.95rem; }
-
-      select, input{ font-size:1rem; padding:.75rem .9rem; }
-      .confirmBtn{ font-size:.95rem; padding:.85rem 1rem; }
-    }
-
-    /* overlay login */
-    .overlay{
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.62);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      z-index: 9998;
-    }
-    .overlay .panel{
-      width: min(560px, 96vw);
-      background: rgba(10,18,12,.92);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      padding: 16px;
-    }
-    .overlay h3{ margin:0 0 8px; font-size: 16px; }
-    .overlay .desc{ margin:0 0 12px; color:var(--muted); font-size: 13px; }
-    .overlay .mini{ color:var(--muted); font-size: 12px; margin-top: 8px; }
-  </style>
-</head>
-
-<body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <img class="logoImg" src="imagens/LETRA BRANCA SEM FUNDO.png" alt="Office Net" />
-        <div class="title">
-          <h1>Remoções</h1>
-          <p>Selecione a cidade (aba) e confirme a remoção quando finalizar.</p>
-        </div>
-      </div>
-
-      <div class="actions">
-        <div id="userPill" class="pill">Usuário: —</div>
-        <button class="btn" id="reloadBtn">Recarregar</button>
-        <button class="btn btnGhost" id="logoutBtn">Sair</button>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <div class="card-h">
-          <div>
-            <h2>Clientes pendentes</h2>
-            <p id="countText">Carregando…</p>
-          </div>
-          <div class="pill" id="lastSync">Última sync: —</div>
-        </div>
-
-        <div class="list" id="list"></div>
-        <div class="empty" id="empty">Nenhum cliente pendente 🎉</div>
-      </div>
-
-      <div class="card side">
-        <div class="box">
-          <div class="k">Cidade (aba)</div>
-          <select id="citySelect"></select>
-          <p class="k" style="margin-top:10px;">
-            Dica: o sistema reconhece como “cidade” as abas listadas na aba <b>CONFIG</b>.
-          </p>
-        </div>
-
-        <div class="box" style="border-color: rgba(251,146,60,.25); background: rgba(251,146,60,.06);">
-          <b>Regra simples:</b>
-          <div class="k" style="margin-top:6px;">
-            Pendente = Removido em e Removido por vazios. Confirmou = sistema preenche automaticamente.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LOGIN OVERLAY -->
-  <div class="overlay" id="authOverlay">
-    <div class="panel">
-      <h3>Controle de acesso</h3>
-      <p class="desc">Digite seu email autorizado. Vamos enviar um código de 6 dígitos.</p>
-
-      <div class="box" style="margin:0;">
-        <div class="k">Seu email</div>
-        <input id="emailInput" type="email" placeholder="seuemail@empresa.com" autocomplete="email" />
-        <div style="height:10px;"></div>
-        <button class="btn" id="sendCodeBtn" style="width:100%;">Enviar código</button>
-
-        <div style="height:12px;"></div>
-        <div class="k">Código (6 dígitos)</div>
-        <div class="row">
-          <input id="codeInput" inputmode="numeric" placeholder="123456" maxlength="6" />
-          <button class="btn" id="loginBtn">Entrar</button>
-        </div>
-
-        <div class="mini">Obs.: somente emails cadastrados na aba <b>AUTH</b> da planilha conseguem acesso.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <script>
-    /***************
-     * CONFIG
-     ***************/
-    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw-mqumT5O6mVPP7igwtEArG8BFrq7_DjEm9n8Y5gXG0_KT8qpg8_tYmTMBUgNz9WMnaQ/exec";
-
-    /***************
-     * Helpers UI
-     ***************/
-    const $ = (id) => document.getElementById(id);
-    const listEl = $("list");
-    const emptyEl = $("empty");
-    const countText = $("countText");
-    const lastSync = $("lastSync");
-    const userPill = $("userPill");
-    const toast = $("toast");
-    const citySelect = $("citySelect");
-    const reloadBtn = $("reloadBtn");
-    const logoutBtn = $("logoutBtn");
-
-    const authOverlay = $("authOverlay");
-    const emailInput = $("emailInput");
-    const codeInput  = $("codeInput");
-    const sendCodeBtn = $("sendCodeBtn");
-    const loginBtn = $("loginBtn");
-
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.style.display = "block";
-      clearTimeout(window.__t);
-      window.__t = setTimeout(() => toast.style.display = "none", 5000);
-    }
-
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    function setLoading(isLoading){
-      reloadBtn.disabled = isLoading;
-      if(isLoading) countText.textContent = "Carregando...";
-    }
-
-    /***************
-     * JSONP Client (sem CORS)
-     ***************/
-    function jsonp(action, params = {}){
-      return new Promise((resolve, reject) => {
-        const cb = "__cb_" + Math.random().toString(36).slice(2);
-
-        const url = new URL(WEBAPP_URL);
-        url.searchParams.set("action", action);
-        url.searchParams.set("callback", cb);
-
-        const token = localStorage.getItem("ON_TOKEN") || "";
-        if (token) url.searchParams.set("token", token);
-
-        Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, String(v)));
-
-        const script = document.createElement("script");
-        script.src = url.toString();
-        script.async = true;
-
-        window[cb] = (data) => {
-          cleanup();
-          resolve(data);
-        };
-
-        script.onerror = () => {
-          cleanup();
-          reject(new Error("Falha ao conectar no backend."));
-        };
-
-        function cleanup(){
-          try{ delete window[cb]; }catch(e){}
-          if (script && script.parentNode) script.parentNode.removeChild(script);
-        }
-
-        document.head.appendChild(script);
-      });
-    }
-
-    /***************
-     * Auth Flow
-     ***************/
-    function showAuth(){
-      authOverlay.style.display = "flex";
-    }
-    function hideAuth(){
-      authOverlay.style.display = "none";
-    }
-
-    async function sendCode(){
-      const email = (emailInput.value || "").trim().toLowerCase();
-      if (!email) return showToast("Digite seu email.");
-
-      sendCodeBtn.disabled = true;
-      try{
-        const r = await jsonp("requestCode", { email });
-        if (!r.ok) throw new Error(r.error || "Falha ao enviar código.");
-        showToast("Código enviado ✅ Verifique seu email.");
-      }catch(e){
-        showToast(String(e.message || e));
-      }finally{
-        sendCodeBtn.disabled = false;
-      }
-    }
-
-    async function login(){
-      const email = (emailInput.value || "").trim().toLowerCase();
-      const code  = (codeInput.value || "").trim();
-      if (!email) return showToast("Digite seu email.");
-      if (!code) return showToast("Digite o código.");
-
-      loginBtn.disabled = true;
-      try{
-        const r = await jsonp("verifyCode", { email, code });
-        if (!r.ok) throw new Error(r.error || "Falha no login.");
-        localStorage.setItem("ON_TOKEN", r.token);
-        hideAuth();
-        await reloadAll();
-      }catch(e){
-        showToast(String(e.message || e));
-      }finally{
-        loginBtn.disabled = false;
-      }
-    }
-
-    async function logout(){
-      const token = localStorage.getItem("ON_TOKEN") || "";
-      localStorage.removeItem("ON_TOKEN");
-      userPill.textContent = "Usuário: —";
-      listEl.innerHTML = "";
-      showAuth();
-
-      if (token) {
-        try { await jsonp("logout", { token }); } catch(e) {}
-      }
-    }
-
-    /***************
-     * App
-     ***************/
-    function itemCard(item, city){
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <div>
-          <div class="k">Cliente</div>
-          <div class="v">${escapeHtml(item.cliente)}</div>
-        </div>
-        <button class="confirmBtn">✅ Confirmar remoção</button>
-      `;
-
-      const btn = div.querySelector("button");
-      btn.addEventListener("click", async () => {
-        btn.disabled = true;
-        btn.textContent = "Confirmando...";
-        try{
-          const r = await jsonp("confirm", { city, rowIndex: item.rowIndex });
-          if(!r.ok) throw new Error(r.error || "Falha ao confirmar.");
-          showToast("Remoção confirmada ✅");
-          await loadList();
-        }catch(err){
-          showToast(String(err.message || err));
-        }finally{
-          btn.disabled = false;
-          btn.textContent = "✅ Confirmar remoção";
-        }
-      });
-
-      return div;
-    }
-
-    async function loadMeta(){
-      const r = await jsonp("meta");
-      if(!r.ok) throw new Error(r.error || "Erro ao carregar cidades.");
-
-      userPill.textContent = "Usuário: " + (r.userEmail || "—");
-
-      citySelect.innerHTML = "";
-      (r.cities || []).forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c;
-        opt.textContent = c;
-        citySelect.appendChild(opt);
-      });
-
-      if(!citySelect.value && citySelect.options.length){
-        citySelect.value = citySelect.options[0].value;
+/***********************
+ * Office Net • Remoções
+ * Backend para GitHub Pages (JSONP + Email/Senha)
+ * - Sem CORS (usa JSONP)
+ * - Login por email+senha (hash no Sheet)
+ * - Token de sessão
+ ***********************/
+
+const CONFIG_SHEET = "CONFIG";
+const CONFIG_RANGE = "A2:A";
+
+const AUTH_SHEET = "AUTH";       // A: email | B: hash
+const AUTH_RANGE = "A2:B";
+
+const COL_CLIENTE = 1;      // A
+const COL_REMOVIDO_EM = 2;  // B
+const COL_REMOVIDO_POR = 3; // C
+
+// Se o projeto NÃO estiver vinculado à planilha, coloque o ID aqui.
+// Se estiver vinculado, deixe "".
+const SPREADSHEET_ID = "";
+
+// Sessão
+const TOKEN_TTL_SECONDS = 12 * 60 * 60; // 12h
+
+function ss_(){
+  if (SPREADSHEET_ID && SPREADSHEET_ID.trim()) {
+    return SpreadsheetApp.openById(SPREADSHEET_ID.trim());
+  }
+  return SpreadsheetApp.getActiveSpreadsheet();
+}
+
+/**
+ * Resposta JSONP (sem CORS)
+ */
+function out_(obj, callback){
+  const json = JSON.stringify(obj);
+  if (callback) {
+    return ContentService
+      .createTextOutput(`${callback}(${json});`)
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService
+    .createTextOutput(json)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Endpoint único: /exec?action=...&callback=...
+ */
+function doGet(e){
+  try{
+    const p = (e && e.parameter) ? e.parameter : {};
+    const action = String(p.action || "").trim();
+    const cb = String(p.callback || "").trim(); // JSONP
+
+    if (!action) return out_({ ok:false, error:"action ausente" }, cb);
+
+    switch(action){
+
+      // ===== AUTH =====
+      case "login": {
+        const email = String(p.email || "").trim().toLowerCase();
+        const password = String(p.password || "");
+        if (!email || !password) return out_({ ok:false, error:"email/senha ausente" }, cb);
+
+        const ok = AUTH_verifyEmailPassword_(email, password);
+        if (!ok) return out_({ ok:false, error:"Email ou senha inválidos." }, cb);
+
+        const token = AUTH_genToken_();
+        CacheService.getScriptCache().put("TOKEN:" + token, email, TOKEN_TTL_SECONDS);
+
+        return out_({ ok:true, token, email }, cb);
       }
 
-      if(!citySelect.options.length){
-        showToast(
-          "Nenhuma cidade encontrada.\n" +
-          "➡️ Crie a aba CONFIG e liste as cidades em A2:A."
-        );
+      case "logout": {
+        const token = String(p.token || "").trim();
+        if (token) CacheService.getScriptCache().remove("TOKEN:" + token);
+        return out_({ ok:true }, cb);
       }
+
+      // ===== API PROTEGIDA =====
+      case "meta": {
+        const email = requireAuth_(p);
+        return out_({
+          ok:true,
+          userEmail: email,
+          cities: getCities_()
+        }, cb);
+      }
+
+      case "list": {
+        requireAuth_(p);
+        const city = String(p.city || "").trim();
+        return out_(apiList_(city), cb);
+      }
+
+      case "confirm": {
+        const email = requireAuth_(p);
+        const city = String(p.city || "").trim();
+        const rowIndex = Number(p.rowIndex);
+        return out_(apiConfirm_(city, rowIndex, email), cb);
+      }
+
+      default:
+        return out_({ ok:false, error:"action desconhecida: " + action }, cb);
     }
 
-    async function loadList(){
-      listEl.innerHTML = "";
-      emptyEl.style.display = "none";
-      countText.textContent = "Carregando...";
+  }catch(err){
+    const cb = (e && e.parameter && e.parameter.callback) ? String(e.parameter.callback) : "";
+    return out_({ ok:false, error:String(err && err.message ? err.message : err) }, cb);
+  }
+}
 
-      const city = citySelect.value;
-      if(!city){
-        countText.textContent = "Sem cidade selecionada.";
-        return;
-      }
+// ========= API Interna =========
 
-      const r = await jsonp("list", { city });
-      if(!r.ok) throw new Error(r.error || "Erro ao listar.");
+function apiList_(city) {
+  city = String(city || "").trim();
+  const sh = getCitySheet_(city);
 
-      const items = r.items || [];
-      countText.textContent = `${items.length} pendente(s) em ${city}`;
-      lastSync.textContent = "Última sync: " + new Date().toLocaleString("pt-BR");
+  const lastRow = sh.getLastRow();
+  if (lastRow < 2) return { ok:true, items:[], city };
 
-      if(items.length === 0){
-        emptyEl.style.display = "block";
-        return;
-      }
+  const values = sh.getRange(2,1,lastRow-1,3).getValues();
+  const items = [];
 
-      items.forEach(it => listEl.appendChild(itemCard(it, city)));
+  for (let i = 0; i < values.length; i++) {
+    const [cliente, removidoEm, removidoPor] = values[i];
+    const c = String(cliente || "").trim();
+    if (!c) continue;
+
+    const pendente = !removidoEm && !removidoPor;
+    if (pendente) items.push({ rowIndex: i + 2, cliente: c });
+  }
+
+  return { ok:true, items, city };
+}
+
+function apiConfirm_(city, rowIndex, actorEmail) {
+  city = String(city || "").trim();
+  rowIndex = Number(rowIndex);
+
+  if (!rowIndex || rowIndex < 2) throw new Error("rowIndex inválido.");
+
+  const sh = getCitySheet_(city);
+
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(8000);
+
+  try {
+    const row = sh.getRange(rowIndex, 1, 1, 3).getValues()[0];
+    const cliente = String(row[0] || "").trim();
+    const removidoEm = row[1];
+    const removidoPor = row[2];
+
+    if (!cliente) throw new Error("Linha sem cliente.");
+    if (removidoEm || removidoPor) throw new Error("Este cliente já foi marcado como removido.");
+
+    sh.getRange(rowIndex, COL_REMOVIDO_EM).setValue(new Date());
+    sh.getRange(rowIndex, COL_REMOVIDO_POR).setValue(actorEmail);
+
+    return { ok:true };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+// ========= Auth Helpers =========
+
+function requireAuth_(p){
+  const token = String(p.token || "").trim();
+  if (!token) throw new Error("Sem sessão. Faça login.");
+
+  const email = CacheService.getScriptCache().get("TOKEN:" + token);
+  if (!email) throw new Error("Sessão expirada. Faça login novamente.");
+
+  // Segurança extra: email ainda precisa estar autorizado (e com hash)
+  if (!AUTH_isEmailActive_(email)) throw new Error("Acesso negado.");
+
+  return email;
+}
+
+function AUTH_isEmailActive_(email){
+  const map = AUTH_getMap_();
+  return !!(map[email] && map[email].hash);
+}
+
+function AUTH_getMap_(){
+  const ss = ss_();
+  const sh = ss.getSheetByName(AUTH_SHEET);
+  if (!sh) throw new Error(`Crie a aba "${AUTH_SHEET}" com colunas A: email, B: hash.`);
+  const last = sh.getLastRow();
+  if (last < 2) return {};
+
+  const vals = sh.getRange(2,1,last-1,2).getValues();
+  const map = {};
+  vals.forEach(row => {
+    const email = String(row[0]||"").trim().toLowerCase();
+    const hash = String(row[1]||"").trim();
+    if (email) map[email] = { hash };
+  });
+  return map;
+}
+
+function AUTH_verifyEmailPassword_(email, password){
+  email = String(email || "").trim().toLowerCase();
+  const map = AUTH_getMap_();
+  const rec = map[email];
+  if (!rec || !rec.hash) return false;
+
+  // hash armazenado no formato: v1$SALT$HASH
+  const parts = rec.hash.split("$");
+  if (parts.length !== 3 || parts[0] !== "v1") return false;
+
+  const salt = parts[1];
+  const stored = parts[2];
+
+  const calc = AUTH_sha256_(salt + "::" + password);
+  return calc === stored;
+}
+
+function AUTH_sha256_(text){
+  const raw = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, text, Utilities.Charset.UTF_8);
+  return raw.map(b => ('0' + (b & 0xFF).toString(16)).slice(-2)).join('');
+}
+
+function AUTH_genToken_(){
+  return (Utilities.getUuid().replace(/-/g,"") + Utilities.getUuid().replace(/-/g,""));
+}
+
+/**
+ * ✅ Função de ADMIN para definir senha de um email (gera hash e grava no AUTH!B)
+ * Execute manualmente no Apps Script.
+ */
+function AUTH_setPasswordForEmail(email, newPassword){
+  email = String(email || "").trim().toLowerCase();
+  newPassword = String(newPassword || "");
+
+  if (!email) throw new Error("Email vazio.");
+  if (newPassword.length < 8) throw new Error("Senha fraca. Use no mínimo 8 caracteres.");
+
+  const ss = ss_();
+  const sh = ss.getSheetByName(AUTH_SHEET);
+  if (!sh) throw new Error(`Crie a aba "${AUTH_SHEET}" com colunas A: email, B: hash.`);
+
+  const last = Math.max(sh.getLastRow(), 1);
+  const vals = last >= 2 ? sh.getRange(2,1,last-1,2).getValues() : [];
+
+  // acha linha do email
+  let rowIndex = -1;
+  for (let i=0; i<vals.length; i++){
+    const em = String(vals[i][0]||"").trim().toLowerCase();
+    if (em === email){
+      rowIndex = i + 2;
+      break;
     }
+  }
 
-    async function reloadAll(){
-      try{
-        setLoading(true);
-        await loadMeta();
-        await loadList();
-      }catch(e){
-        const msg = String(e.message || e);
-        showToast(msg);
+  // se não existe, cria
+  if (rowIndex === -1){
+    rowIndex = sh.getLastRow() + 1;
+    sh.getRange(rowIndex,1).setValue(email);
+  }
 
-        if (msg.toLowerCase().includes("sessão") || msg.toLowerCase().includes("login")) {
-          showAuth();
-        }
-      }finally{
-        setLoading(false);
-      }
-    }
+  const salt = Utilities.getUuid().replace(/-/g,"");
+  const hash = AUTH_sha256_(salt + "::" + newPassword);
+  const packed = `v1$${salt}$${hash}`;
 
-    reloadBtn.addEventListener("click", reloadAll);
-    logoutBtn.addEventListener("click", logout);
-    citySelect.addEventListener("change", () => loadList());
+  sh.getRange(rowIndex,2).setValue(packed);
 
-    sendCodeBtn.addEventListener("click", sendCode);
-    loginBtn.addEventListener("click", login);
-    codeInput.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+  return `Senha definida para ${email}`;
+}
 
-    (function init(){
-      const token = localStorage.getItem("ON_TOKEN");
-      if (!token) showAuth();
-      reloadAll();
-    })();
-  </script>
-</body>
-</html>
+// ========= Sheet Helpers =========
+
+function getCities_(){
+  const ss = ss_();
+  const cfg = ss.getSheetByName(CONFIG_SHEET);
+  if (!cfg) throw new Error(`Crie a aba "${CONFIG_SHEET}" e liste as cidades em ${CONFIG_RANGE}.`);
+
+  const vals = cfg.getRange(CONFIG_RANGE).getValues().flat()
+    .map(v => String(v || "").trim())
+    .filter(Boolean);
+
+  return [...new Set(vals)];
+}
+
+function getCitySheet_(city){
+  if (!city) throw new Error("Cidade não informada.");
+
+  const ss = ss_();
+  const sh = ss.getSheetByName(city);
+  if (!sh) throw new Error(`Aba da cidade não existe: "${city}". (Confira a CONFIG)`);
+
+  const h = sh.getRange(1,1,1,3).getValues()[0].map(v => String(v||"").trim().toLowerCase());
+  if (h[0] !== "cliente" || h[1] !== "removido em" || h[2] !== "removido por") {
+    throw new Error(`Cabeçalho inválido na aba "${city}". Use: Cliente | Removido em | Removido por`);
+  }
+
+  return sh;
+}
